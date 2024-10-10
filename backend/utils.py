@@ -26,9 +26,9 @@ def evaluate_model(y_true, y_pred):
     f1 = f1_score(y_true, y_pred, average='weighted')
     return accuracy, precision, recall, f1
 
-def print_evaluation_results(phase, accuracy, precision, recall, f1):
-    print(f"Resultados de {phase}:")
-    print(f"Acurácia: {accuracy}")
-    print(f"Precisão: {precision}")
+def print_evaluation_results(fase, acuracia, precisao, recall, f1):
+    print(f"Resultados de {fase}:")
+    print(f"Acurácia: {acuracia}")
+    print(f"Precisão: {precisao}")
     print(f"Recall: {recall}")
     print(f"F1-Measure: {f1}")

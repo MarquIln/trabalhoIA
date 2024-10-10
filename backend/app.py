@@ -11,9 +11,9 @@ app = Flask(__name__)
 CORS(app, resources={r"/check_winner": {"origins": "http://localhost:3000"}})
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
-train_file_path = os.path.join(base_dir, 'datasets', 'dataSetTreino.csv')
-validation_file_path = os.path.join(base_dir, 'datasets', 'DataSetValidacao.csv')
-test_file_path = os.path.join(base_dir, 'datasets', 'dataSetTeste.csv')
+train_file_path = os.path.join(base_dir, 'datasets', 'train_dataset.csv')
+validation_file_path = os.path.join(base_dir, 'datasets', 'validation_dataset.csv')
+test_file_path = os.path.join(base_dir, 'datasets', 'test_dataset.csv')
 
 X_train, y_train = load_data(train_file_path)
 X_val, y_val = load_data(validation_file_path)

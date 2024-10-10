@@ -1,6 +1,6 @@
 from sklearn.tree import DecisionTreeClassifier
 from utils import evaluate_model, print_evaluation_results
-
+# Modelo de Árvore de Decisão
 class DecisionTreeModel:
     def __init__(self):
         self.model = DecisionTreeClassifier(random_state=42)

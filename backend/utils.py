@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-
+# Funções Auxiliares
 def encode_board(board):
     return [1 if cell == 'X' else -1 if cell == 'O' else 0 for cell in board]
 

@@ -6,7 +6,7 @@ from utils import encode_board, load_data
 from models.decision_tree import DecisionTreeModel
 from models.knn import KNNModel
 from models.mlp import MLPModel
-
+# Aplicação em Flask
 app = Flask(__name__)
 CORS(app, resources={r"/check_winner": {"origins": "*"}})
 

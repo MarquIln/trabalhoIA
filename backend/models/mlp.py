@@ -1,6 +1,6 @@
 from sklearn.neural_network import MLPClassifier
 from utils import evaluate_model, print_evaluation_results
-# Modelo Multi-Layer Perceptron (MLP)
+
 class MLPModel:
     def __init__(self, hidden_layer_sizes=(5,), max_iter=600):
         self.model = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, max_iter=max_iter)

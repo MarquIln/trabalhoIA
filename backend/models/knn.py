@@ -1,6 +1,6 @@
 from sklearn.neighbors import KNeighborsClassifier
 from utils import evaluate_model, print_evaluation_results
-# Modelo K-Nearest Neighbors (KNN)
+
 class KNNModel:
     def __init__(self, n_neighbors=8):
         self.model = KNeighborsClassifier(n_neighbors=n_neighbors)

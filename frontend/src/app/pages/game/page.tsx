@@ -25,18 +25,23 @@ export default function Game() {
   const currentPlayer = useCallback(() => (board.filter((cell) => cell).length % 2 === 0 ? "X" : "O"), [board]);
 
   const checkGameStatus = async (newBoard: Board) => {
-    const response = await axios.post('http://127.0.0.1:5000/check_winner', {
-      board: newBoard
-    });
-    const { winner, game_status } = response.data;
-
-    if (game_status === 'Em andamento') {
-      setWinner(null);
-    } else {
-      setWinner(winner);
-      setIsGameOver(true);
+    try {
+      const response = await axios.post('http://127.0.0.1:5000/check_winner', {
+        board: newBoard,
+      });
+      const { winner, game_status } = response.data;
+  
+      if (game_status === 'Em andamento') {
+        setWinner(null);
+      } else {
+        setWinner(winner);
+        setIsGameOver(true);
+      }
+    } catch (error) {
+      console.error('Erro ao verificar o status do jogo:', error);
     }
   };
+  
 
   useEffect(() => {
     if (board.includes(EMPTY) && !isGameOver) {

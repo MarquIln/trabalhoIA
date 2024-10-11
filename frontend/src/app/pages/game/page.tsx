@@ -1,51 +1,71 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { bestMove, Board, Player } from '@/utils/bot';
 import axios from 'axios';
+import { useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from "react";
+
+const EMPTY: Player | "" = "";
 
 export default function Game() {
-  const [board, setBoard] = useState(Array(9).fill(""));
-  const [winner, setWinner] = useState("");
+  const [board, setBoard] = useState<Board>(Array(9).fill(EMPTY));
+  const [winner, setWinner] = useState<Player | "Empate" | null>(null);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [mode, setMode] = useState<string | null>(null);
 
-  const currentPlayer = () => (board.filter((cell) => cell).length % 2 === 0 ? "X" : "O");
+  const searchParams = useSearchParams();
+  const queryMode = searchParams.get('mode');
 
-  const checkGameStatus = async (newBoard: string[]) => {
-    try {
-      const response = await axios.post('http://127.0.0.1:5000/check_winner', {
-        board: newBoard
-      });
-      const { winner, game_status } = response.data;
-      
-      if (game_status === 'Em andamento') {
-        setWinner("");
-      } else {
-        setWinner(winner);
-        setIsGameOver(true);
-      }
-    } catch (error) {
-      console.error('Erro ao verificar o vencedor:', error);
+  useEffect(() => {
+    if (queryMode) {
+      setMode(queryMode as string);
+    }
+  }, [queryMode]);
+
+  const currentPlayer = useCallback(() => (board.filter((cell) => cell).length % 2 === 0 ? "X" : "O"), [board]);
+
+  const checkGameStatus = async (newBoard: Board) => {
+    const response = await axios.post('http://127.0.0.1:5000/check_winner', {
+      board: newBoard
+    });
+    const { winner, game_status } = response.data;
+
+    if (game_status === 'Em andamento') {
+      setWinner(null);
+    } else {
+      setWinner(winner);
+      setIsGameOver(true);
     }
   };
 
   useEffect(() => {
-    if (board.includes("") && !isGameOver) {
+    if (board.includes(EMPTY) && !isGameOver) {
       checkGameStatus(board);
     }
   }, [board, isGameOver]);
 
+  useEffect(() => {
+    if (mode === 'IA' && !isGameOver && currentPlayer() === 'O') {
+      const move = bestMove(board);
+      if (move !== -1) {
+        const newBoard = [...board];
+        newBoard[move] = 'O';
+        setBoard(newBoard);
+      }
+    }
+  }, [board, mode, isGameOver, currentPlayer]);
+
   const handleClick = (index: number) => {
-    if (board[index] !== "" || isGameOver) return;
+    if (board[index] !== EMPTY || isGameOver) return;
 
     const newBoard = [...board];
     newBoard[index] = currentPlayer();
     setBoard(newBoard);
-
   };
 
   const resetGame = () => {
-    setBoard(Array(9).fill(""));
-    setWinner("");
+    setBoard(Array(9).fill(EMPTY));
+    setWinner(null);
     setIsGameOver(false);
   };
 

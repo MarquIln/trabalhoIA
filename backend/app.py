@@ -6,7 +6,8 @@ from utils import load_data
 from models.decision_tree import DecisionTreeModel
 from models.knn import KNNModel
 from models.mlp import MLPModel
-# Aplicação em Flask
+from models.svm import SVMModel
+
 app = Flask(__name__)
 CORS(app, resources={r"/check_winner": {"origins": "http://localhost:3000"}})
 
@@ -19,17 +20,30 @@ X_train, y_train = load_data(train_file_path)
 X_val, y_val = load_data(validation_file_path)
 X_test, y_test = load_data(test_file_path)
 
+print("Treinando modelo Decision Tree...")
 decision_tree_model = DecisionTreeModel()
 decision_tree_model.train(X_train, y_train)
 decision_tree_model.evaluate(X_val, y_val)
+print("---------------------------------------")
 
+print("Treinando modelo KNN...")
 knn_model = KNNModel(n_neighbors=8)
 knn_model.train(X_train, y_train)
 knn_model.evaluate(X_val, y_val)
+print("---------------------------------------")
 
+print("Treinando modelo MLP...")
 mlp_model = MLPModel(hidden_layer_sizes=(5,), max_iter=600)
 mlp_model.train(X_train, y_train)
 mlp_model.evaluate(X_val, y_val)
+print("---------------------------------------")
+
+
+print("Treinando modelo SVM...")
+svm_model = SVMModel(kernel='linear', C=1.0)
+svm_model.train(X_train, y_train)
+svm_model.evaluate(X_val, y_val)
+print("---------------------------------------")
 
 @app.route('/check_winner', methods=['POST', 'OPTIONS'])
 def check_winner():
